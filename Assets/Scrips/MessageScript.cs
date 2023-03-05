@@ -15,7 +15,9 @@ public class MessageScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField]
     private Text _shopOwnerText;
     [SerializeField]
-    private GameObject _shopUI;
+    private GameObject[] _shopUI;
+    [HideInInspector]
+    public int ShopNum { get; set; }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -37,21 +39,45 @@ public class MessageScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void Message1()
     {
-        _shopOwnerText.text = $"not much going on around here at the moment";
+        switch(ShopNum)
+        {
+            case 0:
+                _shopOwnerText.text = $"not much going on around here at the moment";
+                break;
+            case 1:
+                _shopOwnerText.text = $"bla bla bla";
+                break;
+            default:
+                _shopOwnerText.text = "Something Went wrong";
+                break;
+        }
     }
 
     public void Message2()
     {
-        _shopOwnerText.text = $"select items from the list";
-        if (null != _shopUI)
-            _shopUI.SetActive(true);
+        switch (ShopNum)
+        {
+            case 0:
+                _shopOwnerText.text = $"not much going on around here at the moment";
+                break;
+            case 1:
+                _shopOwnerText.text = $"bla bla bla";
+                break;
+            default:
+                _shopOwnerText.text = "Something Went wrong";
+                break;
+        }
+        _shopUI[ShopNum].GetComponent<BuyScript>().UpdateGoldText();
+        //_shopOwnerText.text = $"select items from the list";
+        if (null != _shopUI[ShopNum])
+            _shopUI[ShopNum].SetActive(true);
     }
 
     void Update()
     {
-        if(CharacterMove.CanMove && CharacterMove.IsMoving && null != _shopUI)
+        if(CharacterMove.CanMove && CharacterMove.IsMoving && null != _shopUI[ShopNum])
         {
-                _shopUI.SetActive(false);
+                _shopUI[ShopNum].SetActive(false);
         }
     }
 }

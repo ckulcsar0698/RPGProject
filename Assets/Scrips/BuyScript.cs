@@ -13,8 +13,6 @@ public class BuyScript : MonoBehaviour
     [SerializeField]
     private int[] _iconNum;
     [SerializeField]
-    private int[] _inventoryItems;
-    [SerializeField]
     private Text[] _itemAmountText;
     [SerializeField]
     private Text _currencyText;
@@ -22,17 +20,43 @@ public class BuyScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        _currencyText.text = InventoryItems.GoldInInventory.ToString();
+        for(int i = 0; i < _itemAmountText.Length; i++)
+        {
+            _itemAmountText[i].text = _itemAmounts[i].ToString();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnBuy(int item)
     {
+        if(InventoryItems.GoldInInventory >= _itemCost[item] && _itemAmounts[item] > 0)
+        {
+            UpdateInventory(item);
+            UpdateShop(item);
+        }
+    }
 
+    void UpdateInventory(int item)
+    {
+        InventoryItems.NewIcon = _iconNum[item];
+        InventoryItems.ShouldIconUpdate = true;
+        InventoryItems.GoldInInventory -= _itemCost[item];
+    }
+
+    void UpdateShop(int item)
+    {
+        _itemAmounts[item]--;
+        _itemAmountText[item].text = _itemAmounts[item].ToString();
+        _currencyText.text = InventoryItems.GoldInInventory.ToString();
     }
 
     public void CloseShop()
     {
         _shopUI.SetActive(false);
+    }
+
+    public void UpdateGoldText()
+    {
+        _currencyText.text = InventoryItems.GoldInInventory.ToString();
     }
 }

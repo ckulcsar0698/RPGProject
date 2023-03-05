@@ -22,13 +22,17 @@ public class InventoryItems : MonoBehaviour
     private Text[] _textObjects;
     [SerializeField]
     private Sprite _KeySprite;
+    [SerializeField]
+    private GameObject _messageBox;
+    [SerializeField]
+    private Text _currencyText;
 
     Dictionary<Sprite, int> _itemsInInventory;
 
     public static int NewIcon { get; set; } = 0;
     public static bool ShouldIconUpdate = false;
-    public static bool InventoryHasKey = true;
-    public static int GoldInInventory = 0;
+    public static bool InventoryHasKey = false;
+    public static int GoldInInventory = 300;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +53,8 @@ public class InventoryItems : MonoBehaviour
     {
         if( ShouldIconUpdate )
         {
+            _currencyText.text = GoldInInventory.ToString();
+
             int i = 0;
             foreach(Image slot in _emptySlots)
             {
@@ -78,7 +84,6 @@ public class InventoryItems : MonoBehaviour
 
             ShouldIconUpdate = false;
         }
-
     }
 
     void UpdateItemCount(int index, int count)
@@ -92,6 +97,7 @@ public class InventoryItems : MonoBehaviour
 
     public void OnOpenMenu()
     {
+        _messageBox.SetActive(false);
         _inventoryMenu.SetActive(true);
         _openBook.SetActive(true);
         _closeBook.SetActive(false);
